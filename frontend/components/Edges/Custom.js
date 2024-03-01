@@ -2,7 +2,7 @@ import React from 'react';
 import {BiX} from 'react-icons/bi'
 import { getBezierPath, getEdgeCenter } from 'react-flow-renderer';
 
-import '../../css/dist/output.css';
+import '../../src/css/dist/output.css';
 
 const foreignObjectSize = 40;
 
