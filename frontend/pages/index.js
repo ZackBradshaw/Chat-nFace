@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
-//import Navbar from './Components/Navagation/navbar';
-import reportWebVitals from './reportWebVitals';
+import App from './_app';
+import reportWebVitals from 'src/reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('Gradio-Flow'));
 root.render(
