@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { Icon } from 'semantic-ui-react'
 import Import from '../Modal/importer'
-import { random_colour, random_emoji } from "../../helper/visual";
+import { random_colour, random_emoji } from "../../src/helper/visual";
 
-import "../../css/dist/output.css"
+import "../../src/css/dist/output.css"
 
 import {BsArrowLeftShort} from 'react-icons/bs';
-import {ReactComponent as ReactLogo} from '../../images/logo.svg'
+import {ReactComponent as ReactLogo} from '../../src/images/logo.svg'
 
 export default class Navbar extends Component{
     constructor(props){
