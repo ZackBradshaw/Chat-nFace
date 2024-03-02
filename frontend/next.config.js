@@ -1,12 +1,13 @@
-const nextConfig = {
-  webpack(config) {
+const withImages = require('next-images');
+
+module.exports = withImages({
+  webpack(config, options) {
     config.module.rules.push({
       test: /\.svg$/,
-      use: ['@svgr/webpack'],
+      use: ["@svgr/webpack"]
     });
 
     return config;
   },
-};
-
-module.exports = ([], nextConfig);
+  // Your other Next.js config here
+});
