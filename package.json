@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
+    "next-compose-plugins": "^2.2.1"
+  }
+}
