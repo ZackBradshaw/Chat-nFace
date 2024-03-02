@@ -6,7 +6,7 @@ import { random_colour, random_emoji } from "../../src/helper/visual";
 import "../../src/css/dist/output.css"
 
 import {BsArrowLeftShort} from 'react-icons/bs';
-import {ReactComponent as ReactLogo} from '../../src/images/logo.svg'
+import {ReactComponent as ReactLogo} from 'logo.svg'
 
 export default class Navbar extends Component{
     constructor(props){
