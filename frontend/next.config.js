@@ -1,4 +1,3 @@
-const withPlugins = require('next-compose-plugins');
 const nextConfig = {
   webpack(config) {
     config.module.rules.push({
@@ -10,4 +9,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withPlugins([], nextConfig);
+module.exports = ([], nextConfig);
