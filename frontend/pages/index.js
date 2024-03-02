@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './_app';
 import reportWebVitals from '../src/reportWebVitals';
 
-const root = ReactDOM.createRoot(document.getElementById('Gradio-Flow'));
-root.render(
-  <React.StrictMode>
-    < App/>
-  </React.StrictMode>
-);
+// Function to render the app only on the client-side
+const renderApp = () => {
+  const root = ReactDOM.createRoot(document.getElementById('Gradio-Flow'));
+  root.render(
+    <React.StrictMode>
+      <App/>
+    </React.StrictMode>
+  );
+};
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+if (typeof window !== 'undefined') {
+  // Ensure this code runs only in the browser
+  renderApp();
+}
+
 reportWebVitals();
