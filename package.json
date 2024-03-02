@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "@svgr/webpack": "^8.1.0"
+  },
+  "dependencies": {
+    "next-images": "^1.8.5"
   }
 }
