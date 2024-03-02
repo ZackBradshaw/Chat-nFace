@@ -3,8 +3,6 @@ import { Icon } from 'semantic-ui-react'
 import Import from '../Modal/importer'
 import { random_colour, random_emoji } from "../../src/helper/visual";
 
-import "../../src/css/dist/output.css"
-
 import {BsArrowLeftShort} from 'react-icons/bs';
 import {ReactComponent as ReactLogo} from '../../src/images/logo.svg'
 
