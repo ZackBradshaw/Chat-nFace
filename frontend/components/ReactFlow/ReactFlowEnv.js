@@ -1,5 +1,4 @@
 import CustomNodeIframe from "../Nodes/Custom.js";
-import '../../src/css/dist/output.css'
 import ReactFlow, { Background,
                     applyNodeChanges,
                     ReactFlowProvider,
