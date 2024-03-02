@@ -7,8 +7,6 @@ import {CgLayoutGridSmall} from 'react-icons/cg'
 import {useDrag} from '@use-gesture/react'
 import { useSpring, animated } from 'react-spring'
 
-import '../../src/css/counter.css'
-
 const MINIMUM_HEIGHT = 600;
 const MINIMUM_WIDTH = 540; 
 
