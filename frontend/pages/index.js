@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './_app';
 import reportWebVitals from '../src/reportWebVitals';
 
 // Function to render the app only on the client-side
-const renderApp = () => {
+export default function renderApp() {
   const root = ReactDOM.createRoot(document.getElementById('Gradio-Flow'));
   root.render(
     <React.StrictMode>
