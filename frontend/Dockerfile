@@ -1,10 +1,10 @@
-# Use Node.js version 18 as the base image
+# Specify the base image
 FROM node:18.17.0
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json (or yarn.lock) to the working directory
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
 # Install dependencies
