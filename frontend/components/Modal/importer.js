@@ -110,8 +110,8 @@ function Shared(props){
 
     const isFetchable = async (url) => {
         const pattern = {
-            share : /^https?:\/\/*([0-9]{5})*(-gradio)*(.app)?(\/)?$/,
-            hugginFace : /^https?:\/\/*(hf.space)\/*(embed)\/*([a-zA-Z0-9+_-]+)\/*([a-zA-Z0-9+_-]+)\/*([+])?(\/)?$/
+            share : new RegExp("^https?:\\/\\/([0-9a-zA-Z-]+)\\.gradio\\.live\\/?"),
+            hugginFace : new RegExp("^https?:\\/\\/([a-zA-Z0-9-]+)-gradio\\.hf\\.space\\/?$")
         } 
 
         if (!pattern.share.test(url) &&
