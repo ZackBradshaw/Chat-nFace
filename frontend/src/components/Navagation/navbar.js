@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { Icon } from 'semantic-ui-react'
 import Import from '../Modal/importer'
-import { random_colour, random_emoji } from "../../src/helper/visual";
+import { random_colour, random_emoji } from "../../helper/visual";
+
+import "../../css/dist/output.css"
 
 import {BsArrowLeftShort} from 'react-icons/bs';
-import {ReactComponent as ReactLogo} from '../../src/images/logo.svg'
+import {ReactComponent as ReactLogo} from '../../images/logo.svg'
 
 export default class Navbar extends Component{
     constructor(props){
@@ -56,9 +58,9 @@ export default class Navbar extends Component{
      */
     appendStreamNode = async (type) => {
         const pattern = {
-            local : new RegExp("^https?:\/\/localhost(:[0-9]+)?(\/)?$"),
-            share : new RegExp("^https?:\/\/[0-9a-zA-Z-]+\.gradio\.live(\/)?$"),
-            hugginFace : new RegExp("^https?:\/\/[a-zA-Z0-9-]+\-gradio\.hf\.space(\/)?$")
+            local : new RegExp('^https?://(localhost)(:[0-9]+)?(/)?$'),
+            share : new RegExp('^https?://(?:[a-zA-Z0-9]+\\.gradio\\.live)/?$'),
+            huggingFace: new RegExp('^https?://([a-zA-Z0-9-]+\\.hf\\.space)/?$')
         } 
 
         if (this.state.name.length > 20 ||
@@ -75,8 +77,7 @@ export default class Navbar extends Component{
                     'error': true})
                 return 
             } 
-
-        fetch(this.state.text, {method : "GET", mode: 'no-cors'}).then((re) => {
+        fetch(this.state.text, {method: "GET", mode: 'no-cors'}).then((re) => {
             fetch("http://localhost:2000/api/append/port", {method: 'POST', mode : 'cors', headers : { 'Content-Type' : 'application/json' }, body: JSON.stringify({file : "", kwargs : { type : type }, name : this.state.name === "" ?`temp_class_${this.temp_host++}` : `${this.state.name}`, port: 0 , host : this.state.text}) }).then(resp => {
                 this.setState({'text': "",'name' : "",'error' : false,'modal' : false  })
 
