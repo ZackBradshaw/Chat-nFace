@@ -36,29 +36,23 @@ export default function ReactEnviorment() {
     const reactFlowWrapper = useRef(null);
     const [tool, setTool] = useState(false)
 
-    const deleteNodeContains = (id) =>{setNodes((nds) => nds.filter(n => !n.id.includes(`${id}-`) ))}
-    const deleteEdge = useCallback((id) => setEdges((eds) => eds.filter(e => e.id !== id)), [setEdges])
-    const deleteNode = useCallback((id) =>{
-      setNodes(() => nodes.filter(n => n.id !== id ))
-    }, [setNodes, nodes])
-
+    const deleteNodeContains = useCallback((id) => setNodes((nds) => nds.filter(n => !n.id.includes(`${id}-`))), [setNodes]);
+    const deleteEdge = useCallback((id) => setEdges((eds) => eds.filter(e => e.id !== id)), [setEdges]);
+    const deleteNode = useCallback((id) => setNodes((nds) => nds.filter(n => n.id !== id)), [setNodes]);
 
     useEffect(() => {
       const restore = () => {
-      const flow = JSON.parse(localStorage.getItem('flowkey'));
+        const flow = JSON.parse(localStorage.getItem('flowkey'));
         
         if(flow){
-          flow.nodes.map((nds) => nds.data.delete = deleteNode)
-          flow.edges.map((eds) => eds.data.delete = deleteEdge)
-          setNodes(flow.nodes || [])
-          setEdges(flow.edges || [])
-          console.log(flow)
+          const updatedNodes = flow.nodes.map((nds) => ({ ...nds, data: { ...nds.data, delete: deleteNode }}));
+          const updatedEdges = flow.edges.map((eds) => ({ ...eds, data: { ...eds.data, delete: deleteEdge }}));
+          setNodes(updatedNodes || []);
+          setEdges(updatedEdges || []);
         }
       }
-      restore()
-    },[deleteNode, deleteEdge])
-
-
+      restore();
+    },[deleteNode, deleteEdge]);
 
     const onNodesChange = useCallback(
       (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -72,12 +66,11 @@ export default function ReactEnviorment() {
 
     const onEdgeUpdate = useCallback(
       (oldEdge, newConnection) => setEdges((els) => updateEdge(oldEdge, newConnection, els)),
-      []
+      [setEdges]
     );
 
     const onConnect = useCallback(
       (params) => {
-        console.log(params)
         setEdges((els) => addEdge({...params, type: "custom", animated : true, style : {stroke : "#00FF4A", strokeWidth : "6"}, markerEnd: {type: MarkerType.ArrowClosed, color : "#00FF4A"}, data : { delete : deleteEdge}}, els))
         fetch("http://localhost:2000/api/append/connection", {method : "POST", mode : 'cors', headers : { 'Content-Type' : 'application/json' }, body: JSON.stringify({"source": params.source, "target" : params.target})}).then( res => {
           console.log(res)
@@ -88,13 +81,10 @@ export default function ReactEnviorment() {
       [setEdges, deleteEdge]
     );
 
-
-  
     const onDragOver = useCallback((event) => {
       event.preventDefault();
       event.dataTransfer.dropEffect = 'move';
     }, []);
-
 
     const onSave = useCallback(() => {
       if (reactFlowInstance) {
@@ -104,14 +94,15 @@ export default function ReactEnviorment() {
         var labels = [];
         var colour = [];
         var emoji = [];
-          for(let i = 0; i < flow.nodes.length; i++){
-            if (!labels.includes(flow.nodes[i].data.label))
-              colour.push(flow.nodes[i].data.colour)
-              emoji.push(flow.nodes[i].data.emoji)
-              labels.push(flow.nodes[i].data.label)
+        flow.nodes.forEach((node) => {
+          if (!labels.includes(node.data.label)) {
+            colour.push(node.data.colour);
+            emoji.push(node.data.emoji);
+            labels.push(node.data.label);
           }
-        localStorage.setItem('colour',JSON.stringify(colour))
-        localStorage.setItem('emoji', JSON.stringify(emoji))
+        });
+        localStorage.setItem('colour', JSON.stringify(colour));
+        localStorage.setItem('emoji', JSON.stringify(emoji));
       }
     }, [reactFlowInstance]);
 
@@ -123,8 +114,7 @@ export default function ReactEnviorment() {
         localStorage.removeItem('colour')
         localStorage.removeItem('emoji')
       }
-    },[reactFlowInstance])
-
+    },[reactFlowInstance]);
 
     const onDrop = useCallback(
       (event) => {
@@ -135,7 +125,6 @@ export default function ReactEnviorment() {
           const type = event.dataTransfer.getData('application/reactflow');
           const item  = JSON.parse(event.dataTransfer.getData('application/item'));
           const style = JSON.parse(event.dataTransfer.getData('application/style'));
-          // check if the dropped element is valid
           if (typeof type === 'undefined' || !type) {
             return;
           }
