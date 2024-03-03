@@ -1,7 +1,7 @@
 import { Modal, Icon, Message} from 'semantic-ui-react'
-import {ReactComponent as Gradio} from '../../src/images/gradio.svg'
-import {ReactComponent as Streamlit} from '../../src/images/streamlit.svg'
-import {ReactComponent as Exit} from '../../src/images/exit.svg'
+import {ReactComponent as Gradio} from '../../../src/images/gradio.svg'
+import {ReactComponent as Streamlit} from '../../../src/images/streamlit.svg'
+import {ReactComponent as Exit} from '../../../src/images/exit.svg'
 import { useState } from 'react'
 import {BsSearch} from 'react-icons/bs';
 
