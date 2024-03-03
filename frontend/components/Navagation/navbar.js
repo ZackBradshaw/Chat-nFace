@@ -56,9 +56,9 @@ export default class Navbar extends Component{
      */
     appendStreamNode = async (type) => {
         const pattern = {
-            local : /^https?:\/\/(localhost)*(:[0-9]+)?(\/)?$/,
-            share : /^https?:\/\/*([0-9]{5})*(-gradio)*(.app)?(\/)?$/,
-            hugginFace : /^https?:\/\/*(hf.space)\/*(embed)\/*([a-zA-Z0-9+_-]+)\/*([a-zA-Z0-9+_-]+)\/*([+])?(\/)?$/
+            local : new RegExp("^https?:\/\/localhost(:[0-9]+)?(\/)?$"),
+            share : new RegExp("^https?:\/\/[0-9a-zA-Z-]+\.gradio\.live(\/)?$"),
+            hugginFace : new RegExp("^https?:\/\/[a-zA-Z0-9-]+\-gradio\.hf\.space(\/)?$")
         } 
 
         if (this.state.name.length > 20 ||
