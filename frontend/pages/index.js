@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './_app';
+import App from '../src/App';
 import reportWebVitals from '../src/reportWebVitals';
 
 // Function to render the app only on the client-side

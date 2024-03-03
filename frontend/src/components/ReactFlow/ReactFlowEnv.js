@@ -1,4 +1,5 @@
 import CustomNodeIframe from "../Nodes/Custom.js";
+import '../../css/dist/output.css'
 import ReactFlow, { Background,
                     applyNodeChanges,
                     ReactFlowProvider,
@@ -12,7 +13,7 @@ import React ,{ useState, useCallback, useRef, useEffect } from 'react';
 import Navbar from '../Navagation/navbar';
 import CustomEdge from '../Edges/Custom'
 import CustomLine from "../Edges/CustomLine.js";
-import { useThemeDetector } from '../../src/helper/visual'
+import { useThemeDetector } from '../../helper/visual'
 import {CgMoreVerticalAlt} from 'react-icons/cg'
 import {BsFillEraserFill} from 'react-icons/bs' 
 import {FaRegSave} from 'react-icons/fa'
@@ -179,4 +180,3 @@ export default function ReactEnviorment() {
       </div>
     );
   }
-
