@@ -1,5 +1,5 @@
 {
-  "name": "chat-n-face",
+  "name": "gradio-board",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,7 +12,6 @@
     "@types/react-dom": "^18.0.6",
     "@use-gesture/react": "^10.2.20",
     "axios": "^0.27.2",
-    "next": "^14.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-flow-renderer": "^10.3.8",
@@ -22,13 +21,11 @@
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.1.3",
     "typescript": "^4.8.2",
-    "web-vitals": "^2.1.4",
-    "next-images": "^1.8.1"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
