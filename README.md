@@ -21,6 +21,33 @@ Chat'nFace is an innovative interface that integrates with Gradio applications t
 - **Interactive Suggestions**: Receive suggestions and guidance on how to use Gradio apps effectively.
 - **Seamless Integration**: Designed to work harmoniously with existing Gradio interfaces.
 
+## Proxmox VMs and Clusters Integration via xterm.js
+
+Chat'nFace now supports interacting with Proxmox VMs and clusters directly through an xterm.js terminal interface. This feature allows users to view and manage their VMs and clusters within the Chat'nFace application.
+
+### Setup and Configuration
+
+#### Frontend
+
+1. Ensure `xterm.js` and `xterm-addon-fit` are installed in your project.
+2. Integrate the `TerminalComponent` into your application where you want the terminal to appear.
+
+#### Backend
+
+1. Set up a WebSocket server that the frontend can connect to for real-time data streaming.
+2. Implement Proxmox API integration in your backend service. This will involve authenticating with your Proxmox server and fetching or sending data as needed.
+
+- **xterm.js**: [xterm.js Documentation](https://xtermjs.org/docs/)
+
+- **Proxmox API**: [Proxmox API Documentation](https://pve.proxmox.com/pve-docs/api-viewer/index.html)
+
+### Usage
+
+To use the Proxmox integration, navigate to the terminal within Chat'nFace and enter your commands. The terminal will communicate with your Proxmox server, allowing you to manage your VMs and clusters directly from the Chat'nFace interface.
+
+### Support
+
+For support with the Proxmox integration, please join our Discord community or contact us directly through the provided channels.
 ## Installation 🛠️
 To get started with Chat'nFace, clone the repository and follow the setup instructions provided in the documentation.
 
