@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 import socket
 import argparse
@@ -6,9 +7,11 @@ import argparse
 # import asyncio 
 # from multiprocessing import Process
 import gradio as gr
+import requests
 
 app = Flask(__name__)
 CORS(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 def portConnection(port : int):
     s = socket.socket(
@@ -99,6 +102,32 @@ def remove_port():
 def open_ports():
     return jsonify(visable)
 
+## Proxmox API
+
+@app.route('/addProxmoxVM', methods=['POST'])
+def add_proxmox_vm():
+    data = request.json
+    # Save or process Proxmox VM data here
+    return {"status": "VM added"}, 200
+
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print('Client disconnected')
+
+@socketio.on('fetchVmData')
+def handle_fetch_vm_data(data):
+    # Fetch VM data from Proxmox using the provided VM address
+    vm_data = requests.get(f"http://{data['vm_address']}/api2/json")
+    emit('vmData', vm_data.json())
+
+   if __name__ == '__main__':
+       socketio.run(app, debug=True, host='0.0.0.0')
+       
+## Gradio API
 
 if __name__ == "__main__":
 
@@ -108,3 +137,4 @@ if __name__ == "__main__":
     app.run(host="0.0.0.0", port=args.port, debug=True)
 
    
+

@@ -17,9 +17,11 @@ import { useThemeDetector } from '../../helper/visual'
 import {CgMoreVerticalAlt} from 'react-icons/cg'
 import {BsFillEraserFill} from 'react-icons/bs' 
 import {FaRegSave} from 'react-icons/fa'
+import ProxmoxVM from '../Proxmox/proxmox.js';
 
 const NODE = {
     custom : CustomNodeIframe,
+    proxmoxVM: ProxmoxVM,
   }
 
 const EDGE = {
@@ -35,6 +37,7 @@ export default function ReactEnviorment() {
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
     const reactFlowWrapper = useRef(null);
     const [tool, setTool] = useState(false)
+    const [showProxmoxForm, setShowProxmoxForm] = useState(false);
 
     const deleteNodeContains = useCallback((id) => setNodes((nds) => nds.filter(n => !n.id.includes(`${id}-`))), [setNodes]);
     const deleteEdge = useCallback((id) => setEdges((eds) => eds.filter(e => e.id !== id)), [setEdges]);
@@ -134,18 +137,39 @@ export default function ReactEnviorment() {
             y: event.clientY - reactFlowBounds.top,
           });
 
-          const newNode = {
-            id: `${item.name}-${nodes.length+1}`,
-            type,
-            position,
-            dragHandle : `#draggable`,
-            data: { label: `${item.name}`, host : `${item.host}`, colour : `${style.colour}`, emoji : `${style.emoji}`, delete : deleteNode },
-          };
-
-          setNodes((nds) => nds.concat(newNode));
+          if (type === 'customProxmox') {
+            const newNode = {
+                id: `proxmox-vm-${nodes.length + 1}`,
+                type: 'customProxmox',
+                position,
+                data: { vmAddress: item.vmAddress },
+            };
+            setNodes((nds) => nds.concat(newNode));
+          } else {
+            const newNode = {
+              id: `${item.name}-${nodes.length+1}`,
+              type,
+              position,
+              dragHandle : `#draggable`,
+              data: { label: `${item.name}`, host : `${item.host}`, colour : `${style.colour}`, emoji : `${style.emoji}`, delete : deleteNode },
+            };
+  
+            setNodes((nds) => nds.concat(newNode));
+          }
       }
       },
       [reactFlowInstance, nodes, deleteNode]);
+
+    const addProxmoxVMNode = (vmAddress) => {
+        const newNode = {
+            id: `proxmox-vm-${nodes.length + 1}`,
+            type: 'proxmoxVM',
+            position: { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight },
+            data: { vmAddress },
+        };
+        setNodes((nds) => nds.concat(newNode));
+        setShowProxmoxForm(false);
+    };
 
     return (
       <div className={`${theme ? "dark" : ""}`}>          
@@ -155,6 +179,16 @@ export default function ReactEnviorment() {
           <FaRegSave title="Save" className={`mt-6 text-black dark:text-white ${tool ? "visible" : " invisible"} ml-auto mr-auto `} onClick={() => onSave()}/> 
           <BsFillEraserFill title="Erase" className={`mt-6 text-black dark:text-white ml-auto mr-auto ${tool ? "visible" : " invisible"} `} onClick={() => onErase()}/>
         </div>
+        {showProxmoxForm && (
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                addProxmoxVMNode(e.target.vmAddress.value);
+            }} className="absolute top-10 left-10 z-50">
+                <input name="vmAddress" type="text" placeholder="Enter Proxmox VM Address" required className="p-2"/>
+                <button type="submit" className="p-2 bg-blue-500 text-white">Add VM</button>
+            </form>
+        )}
+        <button onClick={() => setShowProxmoxForm(true)} className="absolute top-10 right-10 z-50 p-2 bg-green-500 text-white">Add Proxmox VM</button>
         <div className={`flex h-screen w-screen ${theme ? "dark" : ""} transition-all`}>    
           <ReactFlowProvider>
           <Navbar onDelete={deleteNodeContains} colour={JSON.parse(localStorage.getItem('colour'))} emoji={JSON.parse(localStorage.getItem('emoji'))}/>
