@@ -100,15 +100,25 @@ def remove_port():
 
 @app.route("/api/open/ports", methods=["GET"])
 def open_ports():
+    # Assuming 'visable' is a list of open ports information
     return jsonify(visable)
 
 ## Proxmox API
 
-@app.route('/addProxmoxVM', methods=['POST'])
+@app.route('/api/addProxmoxVM', methods=['POST'])
 def add_proxmox_vm():
     data = request.json
-    # Save or process Proxmox VM data here
-    return {"status": "VM added"}, 200
+    # Placeholder for saving or processing Proxmox VM data
+    # This should include logic to handle the data received from the frontend
+    return jsonify({"status": "VM added"}), 200
+
+@app.route('/api/getVncUrl', methods=['GET'])
+def get_vnc_url():
+    vm_address = request.args.get('vmAddress')
+    # Placeholder for fetching VNC URL based on VM address
+    # This should include logic to retrieve the VNC URL for the specified VM
+    vnc_url = "https://example.com/vnc/" + vm_address  # Example VNC URL
+    return jsonify({"vncUrl": vnc_url})
 
 @socketio.on('connect')
 def handle_connect():
@@ -121,14 +131,18 @@ def handle_disconnect():
 @socketio.on('fetchVmData')
 def handle_fetch_vm_data(data):
     # Fetch VM data from Proxmox using the provided VM address
-    vm_data = requests.get(f"http://{data['vm_address']}/api2/json")
-    emit('vmData', vm_data.json())
+    # The actual fetching should be adapted to match your Proxmox setup and API
+    try:
+        vm_data = requests.get(f"http://{data['vm_address']}/api2/json", verify=False)  # Example request
+        emit('vmData', vm_data.json())
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching VM data: {e}")
+        emit('vmData', {'error': 'Failed to fetch VM data'})
 
-   if __name__ == '__main__':
-       socketio.run(app, debug=True, host='0.0.0.0')
-       
+if __name__ == '__main__':
+    socketio.run(app, debug=True, host='0.0.0.0')
+
 ## Gradio API
-
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
