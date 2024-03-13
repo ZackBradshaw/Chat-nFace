@@ -2,12 +2,21 @@ import { Modal, Icon, Message} from 'semantic-ui-react'
 import {ReactComponent as Gradio} from '../../../src/images/gradio.svg'
 import {ReactComponent as Streamlit} from '../../../src/images/streamlit.svg'
 import {ReactComponent as Exit} from '../../../src/images/exit.svg'
+import {ReactComponent as Proxmox} from '../../../src/images/proxmox.svg' 
 import { useState } from 'react'
 import {BsSearch} from 'react-icons/bs';
 
 export default function Import(props){
     const [tab, setTab] = useState("gradio")
     const [subTab, setSubTab] = useState(0)
+    const [embedUrl, setEmbedUrl] = useState(""); 
+    const [vmid, setVmid] = useState(''); 
+    const [node, setNode] = useState(''); 
+
+    const handleProxmoxSubmit = async (e) => {
+        e.preventDefault();
+        props.onAddProxmoxVnc({ vmid, node });
+    };
 
     return (<div>
         <Modal
@@ -27,6 +36,11 @@ export default function Import(props){
                             setTab("streamlit")
                             props.catch ? props.handelError(false) : props.handelError(props.catch) }}>
                             <button id="services-tab" data-tabs-target="#Streamlit" type="button" role="tab" aria-controls="services" aria-selected="false" className={`inline-block p-4 rounded-tl-lg ${ tab === "streamlit" ? 'bg-gray-200'  : 'hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 focus:bg-gray-700'}`}><Streamlit className=" w-20 h-10"/></button>
+                        </li>
+                        <li className="" onClick={()=>{
+                            setTab("proxmox")
+                            props.catch ? props.handelError(false) : props.handelError(props.catch) }}>
+                            <button id="proxmox-tab" data-tabs-target="#Proxmox" type="button" role="tab" aria-controls="proxmox" aria-selected={tab === "proxmox" ? "true" : "false"} className={`inline-block p-4 rounded-tl-lg ${ tab === "proxmox" ? 'bg-gray-200'  : 'hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 focus:bg-gray-700'}`}><Proxmox className=" w-20 h-10"/></button>
                         </li>
                     </ul>
                     <div className='absolute right-5 top-5 z-20 mr-5'
@@ -83,7 +97,42 @@ export default function Import(props){
                         <Shared type="streamlit" textHandler={props.textHandler} appendHandler={props.appendHandler} handelError={props.handelError} catch={props.catch}/>
                     </div>
                     }
-
+                    { tab === "proxmox" && 
+                    <div className='w-full bg-white'>
+                        <form onSubmit={handleProxmoxSubmit} className="p-5">
+                            <input
+                                type="text"
+                                placeholder="VM ID"
+                                className="input input-bordered input-primary w-full max-w-xs"
+                                value={vmid}
+                                onChange={(e) => setVmid(e.target.value)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Node"
+                                className="input input-bordered input-primary w-full max-w-xs mt-2"
+                                value={node}
+                                onChange={(e) => setNode(e.target.value)}
+                            />
+                            <button className="btn btn-primary mt-2" type="submit">
+                                Create Proxmox VNC
+                            </button>
+                        </form>
+                    </div>
+                    }
+                    
+                    <div className='embed-form p-5'>
+                        <input
+                            type="text"
+                            placeholder="Embed URL"
+                            className="input input-bordered input-primary w-full max-w-xs"
+                            value={embedUrl}
+                            onChange={(e) => setEmbedUrl(e.target.value)}
+                        />
+                        <button className="btn btn-primary mt-2" onClick={() => props.onAddEmbed({ url: embedUrl, type: 'embed' })}>
+                            Add Embed
+                        </button>
+                    </div>
                 </Modal>
     </div>)
 }

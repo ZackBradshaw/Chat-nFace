@@ -73,3 +73,4 @@ Werkzeug==2.2.0
 yarl==1.7.2
 zipp==3.8.1
 flask-socketio
+proxmoxer

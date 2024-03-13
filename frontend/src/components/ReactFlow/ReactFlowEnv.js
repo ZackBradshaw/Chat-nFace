@@ -59,6 +59,26 @@ export default function ReactEnviorment() {
       restore();
     },[deleteNode, deleteEdge]);
 
+    const handleAddProxmoxVnc = async ({ vmid, node }) => {
+      const response = await fetch('http://localhost:5000/api/proxmox/vnc', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ vmid, node }),
+      });
+      const data = await response.json();
+      // Use data.iframe_src to create a new node in React Flow
+    };
+
+    const handleAddEmbed = useCallback((embedData) => {
+      const newNode = {
+        id: `embed-${nodes.length + 1}`,
+        type: 'embed',
+        position: reactFlowInstance.project({ x: 0, y: 0 }), // Adjust position as needed
+        data: { url: embedData.url, width: embedData.width || '100%', height: embedData.height || '400px' },
+      };
+      setNodes((nds) => nds.concat(newNode));
+    }, [nodes, reactFlowInstance]);
+
     const onNodesChange = useCallback(
       (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
       [setNodes]
@@ -202,7 +222,7 @@ export default function ReactEnviorment() {
         <button onClick={() => setShowProxmoxForm(true)} className="absolute top-10 right-10 z-50 p-2 bg-green-500 text-white">Add Proxmox VM</button>
         <div className={`flex h-screen w-screen ${theme ? "dark" : ""} transition-all`}>    
           <ReactFlowProvider>
-          <Navbar onDelete={deleteNodeContains} colour={JSON.parse(localStorage.getItem('colour'))} emoji={JSON.parse(localStorage.getItem('emoji'))}/>
+          <Navbar onDelete={deleteNodeContains} colour={JSON.parse(localStorage.getItem('colour'))} emoji={JSON.parse(localStorage.getItem('emoji'))} nodes={nodes}/>
             <div className="h-screen w-screen" ref={reactFlowWrapper}>
               <ReactFlow nodes={nodes} edges={edges} nodeTypes={NODE} edgeTypes={EDGE} onNodesChange={onNodesChange} onNodesDelete={deleteNode} onEdgesChange={onEdgesChange} onEdgeUpdate={onEdgeUpdate} onConnect={onConnect} onDragOver={onDragOver} onDrop={onDrop} onInit={setReactFlowInstance} connectionLineComponent={CustomLine} fitView>
                 <Background variant='dots' size={1} className=" bg-white dark:bg-neutral-800"/>
