@@ -6,6 +6,7 @@ import argparse
 # import asyncio 
 # from multiprocessing import Process
 import gradio as gr
+from proxmoxer import ProxmoxAPI
 
 app = Flask(__name__)
 CORS(app)
@@ -64,7 +65,31 @@ def Root():
 #     return jsonify({"executed" : True,
 #                     "process" : "ended" })
 
+@app.route("/api/preview_vnc", methods=["POST"])
+def preview_vnc():
+    data = request.json
+    vmid = data['vmID']
+    nodeid = data['nodeid']
+    proxmox = ProxmoxAPI('proxmox-domain', user='api', password='password', verify_ssl=False)
+    config = proxmox.nodes(nodeid).qemu(vmid).vncproxy.create(websocket=1)
+    ticket = proxmox.access.ticket.post(username='api', password='password')['data']['ticket']
+    port = config['data']['port']
+    host = 'proxmox-domain'
+    src_href = f'https://{host}:8006/?console=kvm&novnc=1&node={nodeid}&resize=1&vmid={vmid}&path=api2/json/nodes/{nodeid}/qemu/{vmid}/vncwebsocket/port/{port}/vncticket/{ticket}'
+    return jsonify({"iframe_src": src_href})
 
+@app.route("/api/proxmox/vnc", methods=["POST"])
+def create_proxmox_vnc():
+    data = request.json
+    vmid = data['vmid']
+    node = data['node']
+    proxmox = ProxmoxAPI('proxmox-domain', user='user@pam', password='password', verify_ssl=False)
+    config = proxmox.nodes(node).qemu(vmid).vncproxy.create(websocket=1)
+    ticket = proxmox.access.ticket.post(username='user@pam', password='password')['data']['ticket']
+    port = config['data']['port']
+    host = 'proxmox-domain'
+    src_href = f'https://{host}:8006/?console=kvm&novnc=1&node={node}&resize=1&vmid={vmid}&path=api2/json/nodes/{node}/qemu/{vmid}/vncwebsocket/port/{port}/vncticket/{ticket}'
+    return jsonify({"iframe_src": src_href})
 
 @app.route("/api/append/port" , methods=["POST"])
 def append_port():
@@ -85,16 +110,6 @@ def remove_port():
     return jsonify({"executed" : True,
                     "ports" : current['port']})
 
-
-# @app.route("/api/remove/module" , methods=["POST"])
-# def remove_module():
-#     current = request.json
-   
-#     visable.remove(current)
-#     process_map[current["kwargs"]["metadata"]].terminate()
-#     return jsonify({"executed" : True,
-#                     "ports" : current['port']})
-
 @app.route("/api/open/ports", methods=["GET"])
 def open_ports():
     return jsonify(visable)
@@ -106,8 +121,3 @@ if __name__ == "__main__":
     parser.add_argument("-p", "--port", help="location of flask api port on local host", default=5000)
     args = parser.parse_args()
     app.run(host="0.0.0.0", port=args.port, debug=True)
-
-   
-
-   
-
