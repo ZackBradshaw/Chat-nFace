@@ -18,10 +18,12 @@ import {CgMoreVerticalAlt} from 'react-icons/cg'
 import {BsFillEraserFill} from 'react-icons/bs' 
 import {FaRegSave} from 'react-icons/fa'
 import ProxmoxVM from '../Proxmox/proxmox.js';
+import EmbedNode from "../Nodes/EmbedNode.js"; 
 
 const NODE = {
     custom : CustomNodeIframe,
     proxmoxVM: ProxmoxVM,
+    embed: EmbedNode, 
   }
 
 const EDGE = {
@@ -137,23 +139,32 @@ export default function ReactEnviorment() {
             y: event.clientY - reactFlowBounds.top,
           });
 
-          if (type === 'customProxmox') {
-            const newNode = {
+          let newNode;
+          if (type === 'embed') {
+            newNode = {
+              id: `embed-${nodes.length + 1}`,
+              type: 'embed',
+              position,
+              data: { url: item.url, width: item.width, height: item.height },
+            };
+          } else if (type === 'customProxmox') {
+            newNode = {
                 id: `proxmox-vm-${nodes.length + 1}`,
                 type: 'customProxmox',
                 position,
                 data: { vmAddress: item.vmAddress },
             };
-            setNodes((nds) => nds.concat(newNode));
           } else {
-            const newNode = {
+            newNode = {
               id: `${item.name}-${nodes.length+1}`,
               type,
               position,
               dragHandle : `#draggable`,
               data: { label: `${item.name}`, host : `${item.host}`, colour : `${style.colour}`, emoji : `${style.emoji}`, delete : deleteNode },
             };
+          }
   
+          if (newNode) {
             setNodes((nds) => nds.concat(newNode));
           }
       }
